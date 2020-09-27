@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>淘宝返现信息统计_数据添加</title>
+
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-duallistbox.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
+		<link rel="stylesheet" href="assets/css/select2.min.css" />
+		<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<script src="assets/js/ace-extra.min.js"></script>
+	</head>
+
+	<body class="no-skin">
+		
+		<div id="navbar" class="navbar navbar-default          ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="index.html" class="navbar-brand">
+						<small>
+							<i class="fa fa-laptop"></i>
+							淘宝返现信息统计
+						</small>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.loadState('main-container')}catch(e){}
+			</script>
+
+			<div id="sidebar" class="sidebar responsive ace-save-state">
+				<script type="text/javascript">
+					try{ace.settings.loadState('sidebar')}catch(e){}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">	
+				</div>
+
+				<ul class="nav nav-list">
+					<li class="">
+						<a href="index.html">
+							<i class="menu-icon fa fa-tachometer"></i>
+							<span class="menu-text">
+								主页概览 
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a href="msg.html">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text">
+								数据管理
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+					<!-- <li class="active open">
+						<a href="add.html">
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text">
+								数据添加 
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li> -->
+
+				</ul>
+			</div>
+
+			<div class="main-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" role="form">
+							
+							<div class="space-6"></div>
+							
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="food">支付类型：</label>
+							
+								<div class="radio" id="paymentType">
+									<!-- <select id="paymentType" class="multiselect" multiple="">
+										<option value="好评返现">好评返现</option>
+										<option value="返运费">返运费</option>
+									</select> -->
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br> 淘宝ID： </label>
+								<div class="col-sm-9"><br>
+									<input type="text" id="taobao_id" placeholder="淘宝ID" class="col-xs-10 col-sm-5" />
+									<div id="tidy"><img id="tidyn"/><a href="#" id="tid"></a></div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br> 订单编号： </label>
+								<div class="col-sm-9"><br>
+									<input class="col-xs-10 col-sm-5" placeholder="订单编号" id="order_id" style="IME-MODE: disabled;" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" />
+									<div id="dingy"><img id="dingyn"/><a href="#" id="dingdan"></a></div>
+								</div>
+								
+							</div>	
+												
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br> 金&nbsp;&nbsp;额： </label>
+								<div class="col-sm-9"><br>
+									<input class="col-xs-10 col-sm-5" placeholder="金额" id="price" style="IME-MODE: disabled;" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" />
+									<div id="jiney"><img id="jineyn"/><a href="#" id="jine"></a></div>
+								</div>
+							</div>		
+							
+							<div class="form-group">
+								<br><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="food">操作人员：</label>
+							
+								<div class="radio" id="user_id">
+									<!-- <select id="user_id" class="multiselect" multiple="">
+										<option value="测试1">测试1</option>
+										<option value="测试2">测试2</option>
+									</select> -->
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br></label>
+								<div class="col-sm-9"><br>
+									<input type="button" class="btn btn-warning btn-xlg" id="addmsg" value="保存并提交" onclick="save()"/>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+						
+			</div>
+		</div>
+	</div>
+</div>
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/jquery.bootstrap-duallistbox.min.js"></script>
+		<script src="assets/js/jquery.raty.min.js"></script>
+		<script src="assets/js/bootstrap-multiselect.min.js"></script>
+		<script src="assets/js/select2.min.js"></script>
+		<script src="assets/js/jquery-typeahead.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+
+		<script type="text/javascript">
+			jQuery(function($){
+				
+				$('.select2').css('width','200px').select2({allowClear:true});
+				
+				$("#order_id").blur(function(){
+					var order_id = document.getElementById("order_id").value;
+					var order_idPattern = /^[1-9][0-9]{17}$/;
+					//alert(order_id);
+					$.ajax({
+						type:"post",
+						dataType:"json",
+						url:"http://47.103.19.180:8080/fanxian/listByOrderNum.action",
+						data:{
+							order_num:order_id,
+						},
+						cache:false,
+						success:function(data){
+							if(data.length==1){
+								$('#dingdan').html("订单号已经录入");
+								dingdanf();
+							}else if(order_id==""||order_id==null){
+								$('#dingdan').html("订单号不能为空");
+								dingdanf();
+							}else if(!order_idPattern.test(order_id)){
+								$('#dingdan').html("订单号位数错误");
+								dingdanf();
+							}else{
+								$('#dingdan').html("");
+								dingdant();
+							}
+						},
+						error:function(xhr,type,errorThrown){
+							alert("服务器异常！");
+						}
+					});
+				});
+				
+				$("#price").blur(function(){
+					var price = document.getElementById("price").value;
+					//alert(order_id);
+					if(price==""||price==null){
+						$('#jine').html("金额不能为空");
+						jinef();
+					}else{
+						jinet();
+						$('#jine').html("");
+					}
+				});
+				
+				$("#taobao_id").blur(function(){
+					var taobao_id = document.getElementById("taobao_id").value;
+					//alert(order_id);
+					if(taobao_id==""||taobao_id==null){
+						$('#tid').html("ID不能为空");
+						tidf();
+					}else{
+						tidt();
+						$('#tid').html("");
+					}
+				});
+			});
+		</script>
+		<script type="text/javascript">		
+			window.onload = function() {
+				
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:"http://47.103.19.180:8080/fanxian/listDict.action",
+					data:{
+						dict_type: 1
+					},
+					cache:false,
+					success:function(data){
+						$('#paymentType').append('<label><input class="ace" name="form-field-radio1" type="radio" value="' + data[0].dict_name + '"/><span class="lbl">' + data[0].dict_name + '</span></label>');
+						$('#paymentType').append('<label><input class="ace" name="form-field-radio1" type="radio" value="' + data[1].dict_name + '"/><span class="lbl">' + data[1].dict_name + '</span></label>');
+					},
+					error:function(xhr,type,errorThrown){
+						alert("服务器异常！");
+					}
+				});
+				
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:"http://47.103.19.180:8080/fanxian/listDict.action",
+					data:{
+						dict_type: 2
+					},
+					cache:false,
+					success:function(data){
+						$('#user_id').append('<label><input class="ace" name="form-field-radio2" type="radio" value="' + data[0].dict_name + '"/><span class="lbl">' + data[0].dict_name + '</span></label>');
+						$('#user_id').append('<label><input class="ace" name="form-field-radio2" type="radio" value="' + data[1].dict_name + '"/><span class="lbl">' + data[1].dict_name + '</span></label>');
+					},
+					error:function(xhr,type,errorThrown){
+						alert("服务器异常！");
+					}
+				});
+			}
+			
+			function dingdant(){
+				var img = document.getElementById('dingyn');
+				img.setAttribute('src','yes.png');
+				//document.getElementById('dingy').appendChild(img);
+			}
+			function dingdanf(){
+				var img = document.getElementById('dingyn');
+				img.setAttribute('src','no.png');
+			}
+			function jinet(){
+				var img = document.getElementById('jineyn');
+				img.setAttribute('src','yes.png');
+				//document.getElementById('dingy').appendChild(img);
+			}
+			function jinef(){
+				var img = document.getElementById('jineyn');
+				img.setAttribute('src','no.png');
+			}
+			function tidt(){
+				var img = document.getElementById('tidyn');
+				img.setAttribute('src','yes.png');
+				//document.getElementById('dingy').appendChild(img);
+			}
+			function tidf(){
+				var img = document.getElementById('tidyn');
+				img.setAttribute('src','no.png');
+			}
+			function save(){
+				var paymentType = $("input[name='form-field-radio1']:checked").val();//alert(paymentType);
+				var taobao_id = document.getElementById("taobao_id").value;
+				var order_id = document.getElementById("order_id").value;
+				var price = document.getElementById("price").value;
+				var user_id = $("input[name='form-field-radio2']:checked").val();
+				var img = document.getElementById('leixingyn');
+				var order_idPattern = /^[1-9][0-9]{17}$/;		
+				if(paymentType==null||taobao_id==null||order_id==null||price==null||user_id==null||paymentType==""||taobao_id==""||order_id==""||price==""||user_id==""){
+					alert("请输入完整的信息！");
+				}else if(!order_idPattern.test(order_id)){
+					alert("请输入正确的订单编号！");
+				}else{
+					$.ajax({
+						type:"post",
+						dataType:"json",
+						url:"http://47.103.19.180:8080/fanxian/insert.action",
+						data:{
+							payment_type:paymentType,
+							taobao_id:taobao_id,
+							order_num:order_id,
+							price:price,
+							user_id:user_id
+						},
+						cache:false,
+						success:function(data){
+							 if(data == '1'){
+								alert("添加成功！");
+								location.replace('msg.html');
+								// window.location.href='msg.html';
+							 }else{
+							  	alert("添加失败！");
+							  }
+						},
+						error:function(xhr,type,errorThrown){
+							alert("服务器异常！");
+						}
+					});
+				}
+				
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>淘宝返现信息统计</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-duallistbox.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
+		<link rel="stylesheet" href="assets/css/select2.min.css" />
+		<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-editable.min.css" />	
+		<script src="assets/js/ace-extra.min.js"></script>
+	</head>
+
+	<body class="no-skin">	
+		<div id="navbar" class="navbar navbar-default          ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="index.html" class="navbar-brand">
+						<small>
+							<i class="fa fa-laptop"></i>
+							淘宝返现信息统计
+						</small>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.loadState('main-container')}catch(e){}
+			</script>
+			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+				<script type="text/javascript">
+					try{ace.settings.loadState('sidebar')}catch(e){}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">	
+				</div>
+
+				<ul class="nav nav-list">
+					<li class="active open">
+						<a href="index.html">
+							<i class="menu-icon fa fa-tachometer"></i>
+							<span class="menu-text">
+								主页概览 
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a href="msg.html">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text">
+								数据管理
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+					<!-- <li class="">
+						<a href="add.html">
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text">
+								数据添加 
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li> -->
+				</ul>
+			</div>
+
+			<div class="main-content">
+				<div class="col-sm-5">
+					<div class="widget-box">
+						
+						<div class="widget-header widget-header-flat widget-header-small">
+							<h5 class="widget-title">
+								<i class="ace-icon fa fa-signal"></i>
+								数据统计
+							</h5>
+						</div>
+				
+						<div class="widget-body">
+							<div class="form-group">
+								<span class="input-icon">
+									开始时间：&nbsp;
+									<span class="editable" id="startdate">----/--/--</span>
+									&nbsp;结束时间：&nbsp;
+									<span class="editable" id="enddate">----/--/--</span>
+									<!-- &nbsp;支付类型：&nbsp;
+									<span class="editable">
+										<select id="paymentType1" class="multiselect" multiple="">
+											
+										</select>
+									</span> -->
+								</span>
+								<button class="btn btn-white btn-info btn-bold" onclick="searchbytime()">
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</button>	
+							</div>
+							<div class="widget-main">
+								<div id="piechart-placeholder"></div>
+								<div class="hr hr8 hr-double"></div>
+								
+								<div class="clearfix">
+									
+									<div class="grid3">
+										<span class="grey">
+											&nbsp; 好评返现：
+										</span><br>
+										<h4 class="bigger pull-right" id="haop"></h4>
+									</div>
+				
+									<div class="grid3">
+										<span class="grey">
+											&nbsp; 返运费：
+										</span><br>
+										<h4 class="bigger pull-right" id="yunf"></h4>
+									</div>
+				
+									<div class="grid3">
+										<span class="grey">
+											&nbsp; 总金额：
+										</span><br>
+										<h4 class="bigger pull-right" id="zonge"></h4>
+									</div>
+								</div>
+							</div><!-- /.widget-main -->
+						</div><!-- /.widget-body -->
+					</div><!-- /.widget-box -->
+				</div>
+				
+				<div class="col-sm-7">
+					<div class="widget-box transparent">
+						<div class="widget-header widget-header-flat">
+							<h4 class="widget-title lighter">
+								<i class="ace-icon fa fa-signal"></i>
+								数据曲线分析
+							</h4>
+							
+							<div class="widget-toolbar">
+								<a href="#" data-action="collapse">
+									<i class="ace-icon fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+				
+						<div class="widget-body">
+							<div class="form-group">
+								<span class="input-icon">
+									开始年份：&nbsp;
+									<span class="editable" id="startyear">----/--/--</span>
+									&nbsp;结束年份：&nbsp;
+									<span class="editable" id="endyear">----/--/--</span>
+									<!-- &nbsp;支付类型：&nbsp;
+									<span class="editable">
+										<select id="paymentType2" class="multiselect" multiple="">
+											
+										</select>
+									</span> -->
+								</span>
+								<button class="btn btn-white btn-info btn-bold" onclick="searchbyyear()">
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</button>	
+							</div>
+							<div class="widget-main padding-4">
+								<div id="sales-charts"></div>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+</div>
+
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/jquery-ui.custom.min.js"></script>
+		<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="assets/js/jquery.easypiechart.min.js"></script>
+		<script src="assets/js/jquery.sparkline.index.min.js"></script>
+		<script src="assets/js/jquery.flot.min.js"></script>
+		<script src="assets/js/jquery.flot.pie.min.js"></script>
+		<script src="assets/js/jquery.flot.resize.min.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/bootstrap-editable.min.js"></script>
+		<script src="assets/js/ace-editable.min.js"></script>
+		<script src="assets/js/jquery.bootstrap-duallistbox.min.js"></script>
+		<script src="assets/js/bootstrap-multiselect.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		<script src="assets/js/jquery.gritter.min.js"></script>
+		<script src="assets/js/bootbox.js"></script>
+		<script src="assets/js/bootstrap-datepicker.min.js"></script>
+		<script src="assets/js/jquery.hotkeys.index.min.js"></script>
+		<script src="assets/js/bootstrap-wysiwyg.min.js"></script>
+		<script src="assets/js/select2.min.js"></script>
+		<script src="assets/js/jquery.maskedinput.min.js"></script>
+		<script type="text/javascript">
+			Date.prototype.Format = function (fmt) {
+				var o = {
+					"M+": this.getMonth() + 1, //月份 
+					"d+": this.getDate(), //日 
+					"H+": this.getHours(), //小时 
+					"m+": this.getMinutes(), //分 
+					"s+": this.getSeconds(), //秒 
+					"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+					"S": this.getMilliseconds() //毫秒 
+				};
+				if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for (var k in o)
+				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+				return fmt;
+			}
+			
+			jQuery(function($) {										
+				$.fn.editable.defaults.mode = 'inline';
+				$.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+				$.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>'+
+				                            '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';    
+				$('#startdate').editable({
+					type: 'adate',
+					date: {
+						    format: 'yyyy-mm-dd',
+						viewformat: 'yyyy-mm-dd',
+						 weekStart: 1
+					}
+				})
+				$('#enddate').editable({
+					type: 'adate',
+					date: {
+						    format: 'yyyy-mm-dd',
+						viewformat: 'yyyy-mm-dd',
+						 weekStart: 1
+					}
+				})
+				$('#startyear').editable({
+					type: 'adate',
+					date: {
+						    format: 'yyyy',
+						viewformat: 'yyyy',
+						 //yearStart: 1
+					}
+				})
+				$('#endyear').editable({
+					type: 'adate',
+					date: {
+						    format: 'yyyy',
+						viewformat: 'yyyy',
+						// yearStart: 1
+					}
+				})
+			})
+			
+			window.onload = function (){
+				var endtime = new Date().Format("yyyy-MM-dd");
+				var endyear = new Date().Format("yyyy");
+				var year = new Date().getFullYear();
+				var month = new Date().getMonth() + 1;
+				var datestart = year + "-" + month + "-" + "01";
+				var startdate = document.getElementById("startdate").innerHTML = datestart;
+				var enddate = document.getElementById("enddate").innerHTML = endtime;
+				var startyear = document.getElementById("startyear").innerHTML = endyear;
+				var yearend = document.getElementById("endyear").innerHTML = endyear;
+				// var paymentType1 = document.getElementById("paymentType1").value;
+				// var paymentType2 = document.getElementById("paymentType2").value;
+				// alert(datestart + "/" + endtime);
+				if (month < 10) {
+				    month = "0" + month;
+				}
+				
+				// $.ajax({
+				// 	type:"post",
+				// 	dataType:"json",
+				// 	url:"http://47.103.19.180:8080/fanxian/listDict.action",
+				// 	data:{
+				// 		dict_type: 1
+				// 	},
+				// 	cache:false,
+				// 	success:function(data){
+						// $('#paymentType1').empty();
+						// $('#paymentType1').append('<option value="' + data[0].dict_name + '">' + data[0].dict_name + '</option>');
+						// $('#paymentType1').append('<option value="' + data[1].dict_name + '">' + data[1].dict_name + '</option>');
+						// $("#paymentType1").multiselect("destroy").multiselect({
+						// 	// 自定义参数，按自己需求定义
+						// 	nonSelectedText : '--请选择--', 
+						// 	buttonClass: 'btn btn-white btn-primary',
+						// 	templates: {
+						// 		button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span> &nbsp;<b class="fa fa-caret-down"></b></button>',
+						// 	},
+						// 	buttonWidth:160
+						// });
+						// $('#paymentType2').empty();
+						// $('#paymentType2').append('<option value="' + data[0].dict_name + '">' + data[0].dict_name + '</option>');
+						// $('#paymentType2').append('<option value="' + data[1].dict_name + '">' + data[1].dict_name + '</option>');
+						// $("#paymentType2").multiselect("destroy").multiselect({
+						// 	// 自定义参数，按自己需求定义
+						// 	nonSelectedText : '--请选择--', 
+						// 	buttonClass: 'btn btn-white btn-primary',
+						// 	templates: {
+						// 		button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span> &nbsp;<b class="fa fa-caret-down"></b></button>',
+						// 	},
+						// 	buttonWidth:160
+						// });
+				// 	},
+				// 	error:function(xhr,type,errorThrown){
+				// 		alert("服务器异常！");
+				// 	}
+				// });
+				
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:"http://47.103.19.180:8080/fanxian/bingChart.action",
+					data:{
+						start_time:datestart,
+						end_time:endtime
+					},
+					cache:false,
+					success:function(data){
+						bing(data);
+					},
+					error:function(xhr,type,errorThrown){
+						alert("服务器异常！");
+					}
+				});
+				
+				// $.ajax({
+				// 	url : "http://47.103.19.180:8080/fanxian/bingChart.action",
+				// 		type : "post",
+				// 		dataType : "json",
+				// 		data:{
+				// 			end_time:endtime
+				// 		},
+				// 		success : function(data_1) {
+				// 			bing(data_1);				
+				// 		}
+				// });
+				
+				$.ajax({
+					url : "http://47.103.19.180:8080/fanxian/zhuChart.action",
+						type : "post",
+						dataType : "json",
+						data:{
+							start_year:endyear,
+							end_year:endyear
+						},
+						success : function(data) {
+							quxian(data);				
+						}
+				});
+				
+			};	
+			
+			function bing(data){
+				var haoping = null;
+				var yunfei = null;
+				
+				for(var i=0;i<data.length;i++){
+					if(data[i].type=="好评返现"){
+						haoping = data[i].price_sum;
+						// alert(haoping);
+					}else if(data[i].type=="返运费"){
+						yunfei = data[i].price_sum;
+						// alert(yunfei);
+					}
+				}
+				$('#haop').html(haoping);
+				$('#yunf').html(yunfei);
+				$('#zonge').html((haoping+yunfei));
+				
+				$.resize.throttleWindow = false;			
+				var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
+				var data = [
+					{ label: "好评返现",  data: 100*(haoping/(haoping+yunfei)), color: "#DA5430"},
+					{ label: "返运费",  data: (100-100*(haoping/(haoping+yunfei))), color: "#FEE074"},
+				]
+				function drawPieChart(placeholder, data, position) {
+				 	$.plot(placeholder, data, {
+						series: {
+							pie: {
+								show: true,
+								tilt:1,
+								highlight: {
+									opacity: 0.25
+								},
+								stroke: {
+									color: '#fff',
+									width: 2
+								},
+								startAngle: 2
+							}
+						},
+						legend: {
+							show: true,
+							position: position || "ne", 
+							labelBoxBorderColor: null,
+							margin:[-30,15]
+						}
+						,
+						grid: {
+							hoverable: true,
+							clickable: true
+						}
+					 })
+				 }
+				 drawPieChart(placeholder, data);
+				 placeholder.data('chart', data);
+				 placeholder.data('draw', drawPieChart);
+			}
+			
+			function quxian(list){
+				var d1 = [];
+				var d2 = [];
+				for (var i = 1; i <= list.length; i++) {
+					
+					if(list[i-1].type=="好评返现"){
+						//alert(list[i-1].month);
+						d1.push([list[i-1].month,list[i-1].price_sum]);
+					}else{
+						d2.push([list[i-1].month,list[i-1].price_sum]);
+					}
+					
+				}										
+					
+				var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
+				$.plot("#sales-charts", [
+					{ label: "好评返现", data: d1 , color: "#DA5430"},
+					{ label: "返运费", data: d2 , color: "#FEE074"},
+				], {
+					hoverable: true,
+					shadowSize: 0,
+					series: {
+						lines: { show: true },
+						points: { show: true }
+					},
+					xaxis: {
+						max: 12,
+						tickLength: 0,
+						tickDecimals: 0
+					},
+					yaxis: {
+						ticks: 10,
+						min: 0,
+						//max: 500,
+						tickDecimals: 0
+					},
+					grid: {
+						backgroundColor: { colors: [ "#fff", "#fff" ] },
+						borderWidth: 0,
+						borderColor:'#555'
+					}
+				});
+			}
+			
+			function searchbytime(){
+				var startdate=document.getElementById("startdate").innerText;
+				var enddate=document.getElementById("enddate").innerText;
+				if(startdate=="----/--/--"||enddate=="----/--/--"){
+					startdate = null;
+					enddate = null;
+				}
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:"http://47.103.19.180:8080/fanxian/bingChart.action",
+					data:{
+						start_time:startdate,
+						end_time:enddate,
+					},
+					cache:false,
+					success:function(data){
+						bing(data);
+					},
+					error:function(xhr,type,errorThrown){
+						alert("服务器异常！");
+					}
+				});
+			}
+			
+			function searchbyyear(){
+				var startdate=document.getElementById("startyear").innerText;
+				var enddate=document.getElementById("endyear").innerText;
+				if(startdate=="----/--/--"||enddate=="----/--/--"){
+					startdate = null;
+					enddate = null;
+				}
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:"http://47.103.19.180:8080/fanxian/zhuChart.action",
+					data:{
+						start_year:startdate,
+						end_year:enddate,
+					},
+					cache:false,
+					success:function(data){
+						quxian(data);
+					},
+					error:function(xhr,type,errorThrown){
+						alert("服务器异常！");
+					}
+				});
+			}
+			
+			
+			
+		</script>
+	</body>
+</html>

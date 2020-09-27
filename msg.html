@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>淘宝返现信息统计</title>
+
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="assets/css/ui.jqgrid.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-datepicker3.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-duallistbox.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
+		<link rel="stylesheet" href="assets/css/select2.min.css" />
+		<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/bootstrap-editable.min.css" />
+		<link rel="stylesheet" href="assets/css/jquery-ui.custom.min.css" />
+		
+	</head>
+
+	<body class="no-skin">
+
+		<div id="navbar" class="navbar navbar-default          ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="index.html" class="navbar-brand">
+						<small>
+							<i class="fa fa-laptop"></i>
+							淘宝返现信息统计
+						</small>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try {
+					ace.settings.loadState('main-container')
+				} catch (e) {}
+			</script>
+
+			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+				<script type="text/javascript">
+					try {
+						ace.settings.loadState('sidebar')
+					} catch (e) {}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				</div>
+
+				<ul class="nav nav-list">
+					<li class="">
+						<a href="index.html">
+							<i class="menu-icon fa fa-tachometer"></i>
+							<span class="menu-text">
+								主页概览
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+
+					<li class="active open">
+						<a href="msg.html">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text">
+								数据管理
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+					<!-- <li class="">
+						<a href="add.html">
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text">
+								数据添加 
+							</span>
+						</a>
+						<b class="arrow"></b>
+					</li> -->
+				</ul>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="page-content">
+						<div class="row">
+							<div class="form-group">
+								<!-- onclick="searchbyorder()" -->
+								<span class="input-icon">
+									<input type="text" id="order_id" placeholder="按订单编号查询" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+								<span class="input-icon">
+									<input type="text" id="taobao_id" placeholder="按淘宝ID查询" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+
+								<span class="input-icon">
+									操作人员：
+								</span>
+								<span class="input-icon">
+									<div class="radio" id="user_id"></div>
+								</span>
+
+								<span class="input-icon">
+									&nbsp;&nbsp;&nbsp;&nbsp;开始时间：&nbsp;&nbsp;&nbsp;&nbsp;
+									<span class="editable" id="startdate">----/--/--</span>
+									&nbsp;&nbsp;&nbsp;&nbsp;结束时间：&nbsp;&nbsp;&nbsp;&nbsp;
+									<span class="editable" id="enddate">----/--/--</span>&nbsp;&nbsp;&nbsp;&nbsp;
+								</span>
+
+								<button class="btn btn-white btn-info btn-bold" onclick="searchbyorder()">
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+									查询
+								</button>
+							</div>
+							<div class="col-xs-12">
+								<table id="grid-table"></table>
+								<div id="grid-pager">
+									<div>
+										<ul class="pager">
+											<li class="previous">
+												<a href='add.html'>
+													<i class="ace-icon glyphicon glyphicon-plus">添加</i>
+												</a>
+											</li>
+											<li class="previous">
+												<a>
+													<i class="ace-icon glyphicon">
+														总金额：<span id="sumPrice"></span>
+													</i>
+												</a>
+											</li>
+											<li class="next">
+												<a onclick="changePageupdown()">
+													<i class="ace-icon fa fa-angle-double-right"></i>
+												</a>
+											</li>
+											<li class="next">
+												<a href="#" id="listpagenum" style="background-color: #6FAED9;color: #FFFFFF"></a>
+											</li>
+											<li class="next">
+												<a onclick="changePageup()">
+													<i class="ace-icon fa fa-angle-double-left"></i>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- 该Div的作用就是当点击jqGrid表格中的修改链接时弹出的dialog, 
+								注意: 是在editRow(rowId)函数中给下面的input赋值 -->
+							<div class="main-content">
+								<div class="row"> 
+									<div class="col-xs-12">
+										<form class="form-horizontal" role="form" id="editform" style="display:none;">
+											
+											<div class="space-6">
+												<input type="text" id="uuid" style="display:none"/>
+											</div>
+											
+											<div class="form-group">
+												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="food">支付类型：</label>
+												<div class="radio" id="paymentType">
+													<label>
+														<input class="ace" name="form-field-radio1" type="radio" value="好评返现"/>
+														<span class="lbl">好评返现</span>
+													</label>
+													<label>
+														<input class="ace" name="form-field-radio1" type="radio" value="返运费"/>
+														<span class="lbl">返运费</span>
+													</label>
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br> 淘宝ID： </label>
+												<div class="col-sm-9"><br>
+													<input type="text" id="taobaoId" placeholder="淘宝ID" class="col-xs-10 col-sm-5" />
+													<div id="tidy"><img id="tidyn"/><a href="#" id="tid"></a></div>
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br> 订单编号： </label>
+												<div class="col-sm-9"><br>
+													<input class="col-xs-10 col-sm-5" placeholder="订单编号" id="orderId" style="IME-MODE: disabled;" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" />
+													<div id="dingy"><img id="dingyn"/><a href="#" id="dingdan"></a></div>
+												</div>
+												
+											</div>	
+																
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br> 金&nbsp;&nbsp;额： </label>
+												<div class="col-sm-9"><br>
+													<input class="col-xs-10 col-sm-5" placeholder="金额" id="price" style="IME-MODE: disabled;" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" />
+													<div id="jiney"><img id="jineyn"/><a href="#" id="jine"></a></div>
+												</div>
+											</div>		
+											
+											<div class="form-group">
+												<br><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="food">操作人员：</label>
+												<div class="radio" id="userId">
+													<label>
+														<input class="ace" name="form-field-radio2" type="radio" value="张东旭"/>
+														<span class="lbl">张东旭</span>
+													</label>
+													<label>
+														<input class="ace" name="form-field-radio2" type="radio" value="张2"/>
+														<span class="lbl">张2</span>
+													</label>
+												</div>
+											</div>
+											
+											<!-- <div class="form-group"> -->
+												<!-- <label class="col-sm-3 control-label no-padding-right" for="form-field-1-1"><br></label> -->
+												<div class="center"><br>
+													<input type="button" class="btn btn-sm btn-success" id="addmsg" value="保存并提交" onclick="update()"/>
+												</div>
+											<!-- </div> -->
+											
+										</form>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript">
+			if ('ontouchstart' in document.documentElement) document.write(
+				"<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+		</script>
+		<script src="assets/js/ace-extra.min.js"></script>
+		<script src="assets/js/jquery-ui.min.js"></script>
+		<script src="assets/js/jquery-ui.custom.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/bootstrap-datepicker.min.js"></script>
+		<script src="assets/js/grid.locale-en.js"></script>
+		<script src="assets/js/jquery.jqGrid.min.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		<script src="assets/js/bootstrap-editable.min.js"></script>
+		<script src="assets/js/ace-editable.min.js"></script>
+		<script src="assets/js/jquery.bootstrap-duallistbox.min.js"></script>
+		<script src="assets/js/jquery.raty.min.js"></script>
+		<script src="assets/js/bootstrap-multiselect.min.js"></script>
+		<script src="assets/js/select2.min.js"></script>
+		<script type="text/javascript">
+			jQuery(function($){
+				$("#orderId").blur(function(){
+					var orderId = document.getElementById("orderId").value;
+					var orderIdPattern = /^[1-9][0-9]{17}$/;
+					//alert(order_id);
+					$.ajax({
+						type:"post",
+						dataType:"json",
+						url:"http://47.103.19.180:8080/fanxian/listByOrderNum.action",
+						data:{
+							order_num:orderId,
+						},
+						cache:false,
+						success:function(data){
+							if(data.length==1){
+								$('#dingdan').html("订单号已经录入");
+								dingdanf();
+							}else if(orderId==""||orderId==null){
+								$('#dingdan').html("订单号不能为空");
+								dingdanf();
+							}else if(!order_idPattern.test(orderId)){
+								$('#dingdan').html("订单号位数错误");
+								dingdanf();
+							}else{
+								$('#dingdan').html("");
+								dingdant();
+							}
+						},
+						error:function(xhr,type,errorThrown){
+							alert("服务器异常！");
+						}
+					});
+				});
+				
+				$("#price").blur(function(){
+					var price = document.getElementById("price").value;
+					//alert(order_id);
+					if(price==""||price==null){
+						$('#jine').html("金额不能为空");
+						jinef();
+					}else{
+						jinet();
+						$('#jine').html("");
+					}
+				});
+				
+				$("#taobaoId").blur(function(){
+					var taobao_id = document.getElementById("taobaoId").value;
+					//alert(order_id);
+					if(taobao_id==""||taobao_id==null){
+						$('#tid').html("ID不能为空");
+						tidf();
+					}else{
+						tidt();
+						$('#tid').html("");
+					}
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			var pagenum;
+
+			Date.prototype.Format = function(fmt) {
+				var o = {
+					"M+": this.getMonth() + 1, //月份 
+					"d+": this.getDate(), //日 
+					"H+": this.getHours(), //小时 
+					"m+": this.getMinutes(), //分 
+					"s+": this.getSeconds(), //秒 
+					"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+					"S": this.getMilliseconds() //毫秒 
+				};
+				if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for (var k in o)
+					if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" +
+						o[k]).substr(("" + o[k]).length)));
+				return fmt;
+			}
+
+			window.onload = function() {
+				var year = new Date().getFullYear();
+				var month = new Date().getMonth() + 1;
+				var day = 1;
+				var datestart = year + "-" + month + "-" + "01";
+				var endtime = new Date().Format("yyyy-MM-dd");
+				var startdate = document.getElementById("startdate").innerHTML = datestart;
+				var enddate = document.getElementById("enddate").innerHTML = endtime;
+				var order_id = document.getElementById("order_id").value;
+				var taobao_id = document.getElementById("taobao_id").value;
+				var user_id = $("input[name='form-field-radio3']:checked").val();
+				// alert(datestart + "/" + endtime);
+// 				if (month < 10) {
+// 					month = "0" + month;
+// 				}
+// 
+				if (document.getElementById("user_id") != null || document.getElementById("user_id") != "") {
+					user_id = document.getElementById("user_id").value;
+				}
+				if (startdate == "----/--/--" || enddate == "----/--/--") {
+					startdate = null;
+					enddate = null;
+				}
+				$.ajax({
+					type: "post",
+					dataType: "json",
+					url: "http://47.103.19.180:8080/fanxian/listBy.action",
+					data: {
+						order_num: order_id,
+						taobao_id: taobao_id,
+						start_time: datestart,
+						end_time: endtime,
+						user_id: user_id,
+						currentPage: 1,
+						pageSize: 9
+					},
+					cache: false,
+					success: function(data) {
+						var currentPage = data.currentPage;
+						$('#listpagenum').append(currentPage);
+						pagenum = currentPage;
+						userlist(data.rows);
+						// alert(data.rows[0].uuid);
+
+						if (data.sumPrice != null) {
+							$('#sumPrice').html(data.sumPrice);
+						} else {
+							$('#sumPrice').html(0);
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						alert("服务器异常！");
+					}
+				});
+		
+				$.ajax({
+					type:"post",
+					dataType:"json",
+					url:"http://47.103.19.180:8080/fanxian/listDict.action",
+					data:{
+						dict_type: 2
+					},
+					cache:false,
+					success:function(data){
+						$('#user_id').append('<label><input class="ace" name="form-field-radio3" type="radio" value="' + data[0].dict_name + '"/><span class="lbl">' + data[0].dict_name + '</span></label>');
+						$('#user_id').append('<label><input class="ace" name="form-field-radio3" type="radio" value="' + data[1].dict_name + '"/><span class="lbl">' + data[1].dict_name + '</span></label>');
+					},
+					error:function(xhr,type,errorThrown){
+						alert("服务器异常！");
+					}
+				});
+			};
+
+			function changePageupdown() {
+				pagenum = pagenum + 1; //alert(typeof(pagenum));
+				var order_id = document.getElementById("order_id").value;
+				var taobao_id = document.getElementById("taobao_id").value;
+				var startdate = document.getElementById("startdate").innerText;
+				var enddate = document.getElementById("enddate").innerText;
+				var user_id = $("input[name='form-field-radio3']:checked").val();
+
+				// if (document.getElementById("user_id") != null || document.getElementById("user_id") != "") {
+				// 	user_id = document.getElementById("user_id").value;
+				// }
+				if (startdate == "----/--/--" || enddate == "----/--/--") {
+					startdate = null;
+					enddate = null;
+				}
+
+				$.ajax({
+					url: "http://47.103.19.180:8080/fanxian/listBy.action",
+					type: "post",
+					dataType: "json",
+					data: {
+						order_num: order_id,
+						taobao_id: taobao_id,
+						start_time: startdate,
+						end_time: enddate,
+						user_id: user_id,
+						currentPage: pagenum,
+						pageSize: 9
+					},
+					success: function(data) {
+						$('#listpagenum').html(data.currentPage);
+						changelist(data.rows);
+					}
+				});
+			}
+
+			function changePageup() {
+				pagenum = pagenum - 1;
+				var order_id = document.getElementById("order_id").value;
+				var taobao_id = document.getElementById("taobao_id").value;
+				var startdate = document.getElementById("startdate").innerText;
+				var enddate = document.getElementById("enddate").innerText;
+				var user_id = $("input[name='form-field-radio3']:checked").val();
+
+				// if (document.getElementById("user_id") != null || document.getElementById("user_id") != "") {
+				// 	user_id = document.getElementById("user_id").value;
+				// }
+				if (startdate == "----/--/--" || enddate == "----/--/--") {
+					startdate = null;
+					enddate = null;
+				}
+
+				$.ajax({
+					url: "http://47.103.19.180:8080/fanxian/listBy.action",
+					type: "post",
+					dataType: "json",
+					data: {
+						order_num: order_id,
+						taobao_id: taobao_id,
+						start_time: startdate,
+						end_time: enddate,
+						user_id: user_id,
+						currentPage: pagenum,
+						pageSize: 9
+					},
+					success: function(data) {
+						$('#listpagenum').html(data.currentPage);
+						changelist(data.rows);
+					}
+				});
+			}
+
+			function changelist(newdata) {
+				$("#grid-table").jqGrid('clearGridData'); //清空表格
+				$("#grid-table").jqGrid('setGridParam', { // 重新加载数据
+					datatype: 'local',
+					data: newdata, //  newdata 是符合格式要求的需要重新加载的数据 
+				}).trigger("reloadGrid");
+			}
+
+			function changelist(newdata) {
+				$("#grid-table").jqGrid('clearGridData'); //清空表格
+				$("#grid-table").jqGrid('setGridParam', { // 重新加载数据
+					datatype: 'local',
+					data: newdata, //  newdata 是符合格式要求的需要重新加载的数据 
+				}).trigger("reloadGrid");
+			}
+
+			function userlist(grid_data) {
+				var grid_selector = "#grid-table";
+				var pager_selector = "#grid-pager";
+
+				var parent_column = $(grid_selector).closest('[class*="col-"]');
+				$(window).on('resize.jqGrid', function() {
+					$(grid_selector).jqGrid('setGridWidth', parent_column.width());
+				})
+
+				$(document).on('settings.ace.jqGrid', function(ev, event_name, collapsed) {
+					if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+						setTimeout(function() {
+							$(grid_selector).jqGrid('setGridWidth', parent_column.width());
+						}, 20);
+					}
+				})
+
+				jQuery(grid_selector).jqGrid({
+					subGrid: true,
+					subGridOptions: {
+						minusicon: "ace-icon fa fa-minus center bigger-110 blue",
+						openicon: "ace-icon fa fa-chevron-right center orange"
+					},
+
+					data: grid_data,
+					datatype: "local",
+					height: 420,
+					colNames: ['操作人ID', '订单编号', '支付类型', '金额', '淘宝ID', '操作时间', '修改时间', 'uuid', '修改', '删除'],
+					colModel: [
+						{name:'user_id',index:'user_id',width:30,editable:false,editoptions:{size:"20",maxlength:"30"}},
+						{name:'order_num',index:'order_num',width:50,editable:true,editoptions:{size:"20",maxlength:"30"}},
+						{name:'payment_type',index:'payment_type',width:30,editable:true,edittype:"select",editoptions:{value:"好评返现:好评返现;返运费:返运费"}},
+						{name:'price',index:'price',width: 30,editable: true,editoptions:{size:"20",maxlength:"30"}},
+						{name:'taobao_id',index:'taobao_id',width:50,editable:true,editoptions:{size:"20",maxlength:"30"}},
+						{name:'create_time',index:'create_time',width:50,editable:false,editoptions:{size:"20",maxlength:"30"}},
+						{name: 'modify_time',index: 'modify_time',width: 50,editable: false,editoptions:{size:"20",maxlength:"30"}},
+						{name:'uuid',index:'uuid',width:0,editable:false,hidden:true,editoptions:{size:"20",maxlength:"30"}},
+						{name:'myac2',index:'',width:75,fixed:true,sortable:false,resize:false,
+							formatter: function(cellValue, options, rowdata, action) {
+								str = "<button onClick='editRow(" + options.rowId + ")' id='editButton' class='btn btn-xs btn-info'><i class='ace-icon fa fa-pencil bigger-120'> 修改</i></button>";
+								return str;
+							}
+						},
+						{name: 'myac',index: '',width:75,fixed: true,sortable: false,resize: false,
+							formatter: function(cellValue, options, rowdata, action){
+										str = "<button onClick='delRow(" + options.rowId + ")' class='btn btn-xs btn-danger'><i class='ace-icon fa fa-trash-o bigger-120'> 删除</i></button>";
+										return str;
+							}
+						}
+					],
+					viewrecords: true,
+					altRows: true,
+					multiselect: true,
+					multiboxonly: true,
+					loadComplete: function() {
+						var table = this;
+						setTimeout(function() {}, 0);
+					},
+					editurl: "http://47.103.19.180:8080/fanxian/updateOrDelete.action",
+					caption: "订单列表如下"
+				});
+
+				$(window).triggerHandler('resize.jqGrid'); //trigger window resize to make the grid get the correct size			
+
+				function enableTooltips(table) {
+					$('.navtable .ui-pg-button').tooltip({
+						container: 'body'
+					});
+					$(table).find('.ui-pg-div').tooltip({
+						container: 'body'
+					});
+					//alert("3");
+				}
+
+				$(document).one('ajaxloadstart.page', function(e) {
+					$.jgrid.gridDestroy(grid_selector);
+					$('.ui-jqdialog').remove();
+					//alert("4");
+				});
+			};
+			
+			function editRow(rowId) {
+				var rowData = $("#grid-table").jqGrid('getRowData', rowId);
+				$("#uuid").val(rowData.uuid);
+				$("#taobaoId").val(rowData.taobao_id);
+				$("#orderId").val(rowData.order_num);
+				$("#price").val(rowData.price);
+				// alert(rowData.payment_type);
+				if (rowData.payment_type == "好评返现") {
+					$("input[name='form-field-radio1']").get(0).checked=true; 
+				} else {
+					$("input[name='form-field-radio1']").get(1).checked=true;
+				}
+				
+				if (rowData.user_id == "张东旭") {
+					$("input[name='form-field-radio2']").get(0).checked=true; 
+					$("input[name='form-field-radio2']").get(1).disabled = true;
+				} else {
+					$("input[name='form-field-radio2']").get(1).checked=true;
+					$("input[name='form-field-radio2']").get(0).disabled = true;
+				}
+				
+				$("#editform").dialog({
+					title: '修改订单信息',
+					height: 800,
+					width: 500,
+					resizable: false,
+					modal: true,  //这里就是控制弹出为模态
+					position: {my: "center", at: "center", of: window},
+				   //  buttons: {
+				   //      "确定":function(){                    
+				   //          alert("修改！");
+							
+				   //          $(this).dialog("close");
+				   //      }
+				   //  }
+				});
+			}
+			
+			function delRow(rowId) {
+				var rowData = $("#grid-table").jqGrid('getRowData', rowId);
+				var uuid = rowData.uuid;
+				
+				if (confirm("确认删除")) {
+					$.ajax({
+						type: "post",
+						dataType: "json",
+						url: "http://47.103.19.180:8080/fanxian/delete.action",
+						data: {
+							uuid: uuid
+						},
+						cache: false,
+						success: function(data) {
+							alert("删除成功");
+							location.reload();
+						},
+						error: function(xhr, type, errorThrown) {
+							alert("服务器异常！");
+						}
+					});
+				}
+			}
+
+			jQuery(function($) {
+				$.fn.editable.defaults.mode = 'inline';
+				$.fn.editableform.loading =
+					"<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+				$.fn.editableform.buttons =
+					'<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>' +
+					'<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';
+				$('#startdate').editable({
+					type: 'adate',
+					date: {
+						format: 'yyyy-mm-dd',
+						viewformat: 'yyyy-mm-dd',
+						weekStart: 1
+					}
+				})
+				$('#enddate').editable({
+					type: 'adate',
+					date: {
+						format: 'yyyy-mm-dd',
+						viewformat: 'yyyy-mm-dd',
+						weekStart: 1
+					}
+				})
+
+				$('.select2').css('width', '200px').select2({
+					allowClear: true
+				})
+				$('.multiselect').multiselect({
+					buttonClass: 'btn btn-white btn-primary',
+					templates: {
+						button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span> &nbsp;<b class="fa fa-caret-down"></b></button>',
+					}
+				});
+			});
+
+			function searchbyorder() {
+				var order_id = document.getElementById("order_id").value;
+				var taobao_id = document.getElementById("taobao_id").value;
+				var startdate = document.getElementById("startdate").innerText;
+				var enddate = document.getElementById("enddate").innerText;
+				var user_id = $("input[name='form-field-radio3']:checked").val();//alert(user_id);
+				// if (document.getElementById("user_id") != null || document.getElementById("user_id") != "") {
+				// 	user_id = var user_id = $("input[name='form-field-radio3']:checked").val();
+				// }
+				if (startdate == "----/--/--" || enddate == "----/--/--") {
+					startdate = null;
+					enddate = null;
+				}
+				$.ajax({
+					type: "post",
+					dataType: "json",
+					url: "http://47.103.19.180:8080/fanxian/listBy.action",
+					data: {
+						order_num: order_id,
+						taobao_id: taobao_id,
+						start_time: startdate,
+						end_time: enddate,
+						user_id: user_id,
+						currentPage: 1,
+						pageSize: 9
+					},
+					cache: false,
+					success: function(data) {
+						changelist(data.rows);
+						if (data.sumPrice != null) {
+							$('#sumPrice').html(data.sumPrice);
+						} else {
+							$('#sumPrice').html(0);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						alert("服务器异常！");
+					}
+				});
+			}
+			
+			function dingdant(){
+				var img = document.getElementById('dingyn');
+				img.setAttribute('src','yes.png');
+			}
+			function dingdanf(){
+				var img = document.getElementById('dingyn');
+				img.setAttribute('src','no.png');
+			}
+			function jinet(){
+				var img = document.getElementById('jineyn');
+				img.setAttribute('src','yes.png');
+			}
+			function jinef(){
+				var img = document.getElementById('jineyn');
+				img.setAttribute('src','no.png');
+			}
+			function tidt(){
+				var img = document.getElementById('tidyn');
+				img.setAttribute('src','yes.png');
+			}
+			function tidf(){
+				var img = document.getElementById('tidyn');
+				img.setAttribute('src','no.png');
+			}
+			function update(){
+				var uuid = document.getElementById("uuid").value;//alert(uuid);
+				var paymentType = $("input[name='form-field-radio1']:checked").val();//alert(paymentType);
+				var taobao_id = document.getElementById("taobaoId").value;
+				var order_id = document.getElementById("orderId").value;
+				var price = document.getElementById("price").value;
+				var user_id = $("input[name='form-field-radio2']:checked").val();//alert(user_id);
+				var img = document.getElementById('leixingyn');
+				var order_idPattern = /^[1-9][0-9]{17}$/;		
+				if(paymentType==null||taobao_id==null||order_id==null||price==null||user_id==null||paymentType==""||taobao_id==""||order_id==""||price==""||user_id==""){
+					alert("请输入完整的信息！");
+				}else if(!order_idPattern.test(order_id)){
+					alert("请输入正确的订单编号！");
+				}else{
+					$.ajax({
+						type:"post",
+						dataType:"json",
+						url:"http://47.103.19.180:8080/fanxian/update.action",
+						data:{
+							uuid: uuid,
+							payment_type: paymentType,
+							taobao_id: taobao_id,
+							order_num: order_id,
+							price: price,
+							user_id: user_id
+						},
+						cache:false,
+						success:function(data){
+							$("#editform").dialog("close");
+							 alert("修改成功");
+							 location.reload();
+						},
+						error:function(xhr,type,errorThrown){
+							alert("服务器异常！");
+						}
+					});
+				}
+				
+			}
+		</script>
+	</body>
+</html>
